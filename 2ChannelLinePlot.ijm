@@ -1,3 +1,17 @@
+//choose where to save your JPEG images
+output = getDirectory("Choose a data folder"); 	
+
+//create dialog asking user to input label names
+Dialog.create("Labels");
+Dialog.addMessage("Choose labels");
+Dialog.addString("Channel 1 label", "mNeon");
+Dialog.addString("Channel 2 label", "Chlorophyll");
+Dialog.show();
+
+//get the choices once dialog closed
+ch1  = Dialog.getString();
+ch2  = Dialog.getString();
+
 //select the line drawing tool ready and then wait for user to 
 //confirm they have drawn the line
 setTool("line");
@@ -27,14 +41,15 @@ for (i=0; i<y.length; i++)
 //create new line plot with normalised values
 Plot.create("Profile Plot", "Distance (microns)", "Normalised intensity (a.u)", x, normalisedY);
 Plot.setStyle(0, "green,none,2,Line");
-Plot.setLegend("BST1:mNeon", "options");
+Plot.setLegend(ch1, "options");
 //Plot.show();
 
 
 //save a JPEG of the line used to generate plot profile
 selectWindow(title);
-run("Fill", "slice");
-saveAs("Jpeg");
+Overlay.addSelection("white", 4); //overlays the selection/ROI with white line of width 4
+run("Flatten", "slice");
+saveAs("Jpeg", output+File.separator+title+ch1+"ROI");
 
 //prompt user to selct the next channel they want for the plot.
 //could also use setSlice(n); if don't want user to choose.
@@ -61,15 +76,18 @@ for (i=0; i<y.length; i++)
 
 Plot.add("line", x, normalisedY);
 Plot.setStyle(1, "magenta,magenta,2,Line");
-Plot.addLegend("BST1:mNeon\nChlorophyll\n", "Auto");
+Plot.addLegend(ch1+"\n"+ch2+"\n", "Auto");
 Plot.show();
 Plot.makeHighResolution("Profile Plot_HiRes",4.0);
-saveAs("PNG", "/Users/liatadler/OneDrive - University of Edinburgh/Lab stuff from home/Lineplotmacro/Profile Plot_HiRes-1.png");
+saveAs("PNG", output+File.separator+title+".png");
 
 //save a JPEG of the line used to generate plot profile
 selectWindow(title);
-run("Fill", "slice");
-saveAs("Jpeg");
+Overlay.addSelection("white", 4);
+run("Flatten", "slice");
+saveAs("Jpeg", output+File.separator+title+ch2+"ROI");
 
+//close all ugly plot windows
+close("Plot*");
 
 
