@@ -9,8 +9,8 @@ choices = newArray("Red", "Green", "Blue", "Grey", "Cyan", "Magenta", "Yellow");
 numberofchannels = newArray("1", "2", "3", "4");
 
 //create dialog asking user to input label names
-Dialog.create("How many channels?");
-Dialog.addChoice("Choose channels", numberofchannels, "2");
+Dialog.create("Plan your pretty profile plot!");
+Dialog.addChoice("How many channels?", numberofchannels, "2");
 
 //User chooses labels for channels
 Dialog.addMessage("Channel labels");
@@ -111,18 +111,21 @@ Plot.setLegend(ch1, "options");
 //save a JPEG of the line used to generate plot profile
 selectWindow(title);
 Overlay.addSelection("white", 4); //overlays the selection/ROI with white line of width 4
-run("Flatten", "slice");
-saveAs("Jpeg", output+File.separator+title+ch1+"ROI");
+run("Flatten", "slice");		  // 'flattens' the image so the ROI becomes part of the image
+saveAs("Jpeg", output+File.separator+title+ch1+"ROI");	//saves new image as a JPEG
+
 
 
 if (numberofchannels1 == 1) {
 	close("Plot*");
+	selectWindow(""+title+".png");
  	exit("Finished :)");
    }
       
-   
+//FOR 2 CHANNELS:
 //prompt user to selct the next channel they want for the plot.
 //could also use setSlice(n); if don't want user to choose.
+selectWindow(title);
 waitForUser("select 2nd channel");
 
 //restore/move the line ROI to the 2nd channel
@@ -163,14 +166,17 @@ saveAs("Jpeg", output+File.separator+title+ch2+"ROI");
 
 //FOR 3CHANNELS:
 
+//if number of channels was 2, close any excess windows, select the high res plot and stop the macro
 if (numberofchannels1 == 2) {
 	close("Plot*");
+	selectWindow(""+title+".png");
 	exit("Finished :)");
    }
 
 
 //prompt user to selct the next channel they want for the plot.
 //could also use setSlice(n); if don't want user to choose.
+selectWindow(title);
 waitForUser("select 3rd channel");
 
 //restore/move the line ROI to the 2nd channel
@@ -205,20 +211,23 @@ saveAs("PNG", output+File.separator+title+".png");
 selectWindow(title);
 Overlay.addSelection("white", 4);
 run("Flatten", "slice");
-saveAs("Jpeg", output+File.separator+title+ch2+"ROI");
+saveAs("Jpeg", output+File.separator+title+ch3+"ROI");
 
 
 //FOR 4 channels:
 
+//if number of channels was 3, close any excess windows, select the high res plot and stop the macro
 if (numberofchannels1 == 3) {
 	//close all ugly plot windows
 	close("Plot*");
+	selectWindow(""+title+".png");
     exit("Finished :)");
    }
 
 
 //prompt user to selct the next channel they want for the plot.
 //could also use setSlice(n); if don't want user to choose.
+selectWindow(title);
 waitForUser("select 4th channel");
 
 //restore/move the line ROI to the 2nd channel
@@ -251,7 +260,7 @@ saveAs("PNG", output+File.separator+title+".png");
 selectWindow(title);
 Overlay.addSelection("white", 4);
 run("Flatten", "slice");
-saveAs("Jpeg", output+File.separator+title+ch2+"ROI");
+saveAs("Jpeg", output+File.separator+title+ch4+"ROI");
 
 
 //close all ugly plot windows
